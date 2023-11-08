@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create_schema_deal" author="ChmutenkoEV">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS deal;
+            alter schema deal owner to deal;
+            set search_path to deal;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_type_credit_status_enum" author="ChmutenkoEV">
+        <sql>
+            create type credit_status_enum as enum('CALCULATED', 'ISSUED');
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_table_credit" author="ChmutenkoEV">
+            <createTable tableName="credit" schemaName="deal" remarks="Информация о кредите">
+                <column name="credit_id" type="bigserial">
+                    <constraints primaryKey="true"/>
+                </column>
+                <column name="amount" type="decimal" remarks="Сумма кредита"/>
+                <column name="term" type="int" remarks="Срок кредита"/>
+                <column name="monthly_payment" type="decimal" remarks="Ежемесячный платеж"/>
+                <column name="rate" type="decimal" remarks="Ставка"/>
+                <column name="psk" type="decimal" remarks="Полная стоимость кредита, в процентах"/>
+                <column name="payment_schedule" type="jsonb" remarks="График платежей"/>
+                <column name="insurance_enable" type="boolean" remarks="Включена ли страховка"/>
+                <column name="salary_client" type="boolean" remarks="Является ли зарплатным клиентом"/>
+                <column name="credit_status" type="credit_status_enum" remarks="Перечисление статусов кредита"/>
+            </createTable>
+    </changeSet>
+
+</databaseChangeLog>
